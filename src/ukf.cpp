@@ -23,7 +23,7 @@ static void check(int c)
  */
 UKF::UKF() {
   // if this is false, laser measurements will be ignored (except during init)
-  use_laser_ = false;
+  use_laser_ = true;
 
   // if this is false, radar measurements will be ignored (except during init)
   use_radar_ = true;
@@ -148,9 +148,9 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
  }
 
 
-  if (!use_laser_ && meas_package.sensor_type_ == MeasurementPackage::LASER)
+  if (!use_laser_)
   {
-    cout << "Ignoring laser message" << endl;
+    cout << "[UKF] Ignoring laser message" << endl;
     return;
   }
 
@@ -380,12 +380,14 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 
       //create matrix for sigma points in measurement space
       MatrixXd Zsig = MatrixXd(n_z, 2 * n_aug_ + 1);
+      Zsig.fill(0.0);
 
       //mean predicted measurement
       VectorXd z_pred = VectorXd(n_z);
-
+      z_pred.fill(0.0);
       //measurement covariance matrix S
       MatrixXd S = MatrixXd(n_z,n_z);
+      S.fill(0.0);
 
       //transform sigma points into measurement space
       //calculate mean predicted measurement
@@ -399,8 +401,8 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 
       // Matrix R
       MatrixXd R = MatrixXd(2,2);
-      R << std_laspx_, 0,
-            0, std_laspy_;
+      R << std_laspx_ * std_laspx_, 0,
+            0, std_laspy_ * std_laspy_;
 
       // calculate innovation covariance Matrix S
       //calculate innovation covariance matrix S
@@ -452,6 +454,7 @@ void UKF::UpdateLidar(MeasurementPackage meas_package,
   VectorXd z = meas_package.raw_measurements_;
 
   MatrixXd Tc = MatrixXd(n_x_, n_z);
+  Tc.fill(0.0);
 
   for (int i = 0; i < 2 * n_aug_ + 1; i++)
   {
