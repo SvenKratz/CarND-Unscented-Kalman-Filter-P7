@@ -10,8 +10,8 @@ The repository contains the following notable files:
 * `src/ukf.cpp` : Implementation of sensor fusion for Lidar and Radar sensors using Unscented Kalman Filter
 * `src/tools.cpp` : utility class containing methods conversions between polar and cartesian coordinates and RMSE on data samples
 * `src/main.cpp` : file contains main function and interfaces with simulator websocket in for data in and output  
-* [./images/carnd-ukf.mp4](carnd-ukf.mp4) video file of the terminal window and simulator output on dataset 1
-* [UKF_Dataset1_RMSE_final.png](UKF_Dataset1_RMSE_final.png) image showing final RMSE values of the UKF after running through dataset 1
+* [images/carnd-ukf.mp4](images/carnd-ukf.mp4) video file of the terminal window and simulator output on dataset 1
+* [images/UKF_Dataset1_RMSE_final.png](images/UKF_Dataset1_RMSE_final.png) image showing final RMSE values of the UKF after running through dataset 1
 
 ## Compilation and Run Instructions
 
