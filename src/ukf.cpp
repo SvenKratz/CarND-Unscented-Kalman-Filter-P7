@@ -7,7 +7,7 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using std::vector;
 
-#define DEBUG
+#undef DEBUG
 
 static void check(int c)
 {
@@ -41,7 +41,7 @@ UKF::UKF() {
 
   // Process noise standard deviation yaw acceleration in rad/s^2
 // TUNED LOWER
-  std_yawdd_ = 0.1;
+  std_yawdd_ = 0.2;
 
   //DO NOT MODIFY measurement noise values below these are provided by the sensor manufacturer.
   // Laser measurement noise standard deviation position1 in m
@@ -75,8 +75,8 @@ UKF::UKF() {
 
   // intialize covariance matrix (as Identity matrix for now)
 
-  P_ << 1,0,0,0,0,
-        0,1,0,0,0,
+  P_ << std_laspx_,0,0,0,0,
+        0,std_laspy_,0,0,0,
         0,0,1,0,0,
         0,0,0,1,0,
         0,0,0,0,1;
@@ -210,7 +210,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
   double delta_t = (meas_package.timestamp_ - last_time_us_ ) / 1.e6;
   last_time_us_ = meas_package.timestamp_;
 
-  cout << "delta t: " << delta_t << endl;
+  //cout << "delta t: " << delta_t << endl;
 
   //predict sigma points
  for (int i = 0; i< 2*n_aug_+1; i++)
@@ -287,7 +287,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
   {
     MatrixXd xDiff = Xsig_pred_.col(i) - x_pred;
 
-    cout << "XDiff " << i << " " << xDiff(3) << endl;
+    //cout << "XDiff " << i << " " << xDiff(3) << endl;
     //angle normalization
     while (xDiff(3)> M_PI) {xDiff(3)-=2.*M_PI;}
     while (xDiff(3)<-M_PI) {xDiff(3)+=2.*M_PI;}
@@ -347,7 +347,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
       for (int i = 0; i < 2 *  n_aug_ + 1; i++)
       {
           MatrixXd zDiff = Zsig.col(i) - z_pred;
-          cout << "zDiff " << i << " " << zDiff(1) << endl;
+          //cout << "zDiff " << i << " " << zDiff(1) << endl;
 
           //angle normalization
           while (zDiff(1)> M_PI) zDiff(1)-=2.*M_PI;
@@ -514,7 +514,7 @@ void UKF::UpdateRadar(MeasurementPackage meas_package,
        //residual
      VectorXd z_diff = Zsig.col(i) - z_pred;
 
-     cout << "z_diff(1) " << i << " "<< z_diff(1) << endl;
+     //cout << "z_diff(1) " << i << " "<< z_diff(1) << endl;
      //angle normalization
      while (z_diff(1)> M_PI) z_diff(1)-=2.*M_PI;
      while (z_diff(1)<-M_PI) z_diff(1)+=2.*M_PI;
@@ -524,7 +524,7 @@ void UKF::UpdateRadar(MeasurementPackage meas_package,
      // state difference
      VectorXd x_diff = Xsig_pred_.col(i) - x_;
 
-     cout << "x_diff(3) " << i << " "<< x_diff(3) << endl;
+     //cout << "x_diff(3) " << i << " "<< x_diff(3) << endl;
 
      //angle normalization
      while (x_diff(3)> M_PI) x_diff(3)-=2.*M_PI;

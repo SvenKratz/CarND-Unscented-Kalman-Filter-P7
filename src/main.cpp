@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define DEBUG
+#undef DEBUG
 
 static void check(int c)
 {
